@@ -1,6 +1,10 @@
 import argparse
 
-def get_therefore_documents_for_processing(config_path='config/config.json', tenant_name=None, db_dir="db/docs"):
+DEFAULT_CONFIG_PATH = 'config/config.json'
+DEFAULT_DB_DIR = 'db/docs'
+DEFAULT_TENANT_NAME = 'defaulttenant'
+
+def get_therefore_documents_for_processing(config_path=DEFAULT_CONFIG_PATH, tenant_name=None, db_dir=DEFAULT_DB_DIR):
     import json
     import therefore_functions
     import utils
@@ -21,7 +25,7 @@ def get_therefore_documents_for_processing(config_path='config/config.json', ten
         tenant_configs = config['Tenants']
 
     for tenant_config in tenant_configs:
-        print(f"Processing tenant: {tenant_config.get('Tenant', 'defaulttenant')}")
+        print(f"Processing tenant: {tenant_config.get('Tenant', DEFAULT_TENANT_NAME)}")
         auth_token = utils.basic_auth_token(tenant_config['Username'], tenant_config['Password'])
 
         category_list = therefore_functions.get_all_categories(
@@ -32,7 +36,7 @@ def get_therefore_documents_for_processing(config_path='config/config.json', ten
 
         # Set up SQLite database and table
         os.makedirs(db_dir, exist_ok=True)
-        tenant = tenant_config.get('Tenant') or 'defaulttenant'
+        tenant = tenant_config.get('Tenant') or DEFAULT_TENANT_NAME
         db_path = f"{db_dir}/{tenant}.db"
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
@@ -78,8 +82,8 @@ def get_therefore_documents_for_processing(config_path='config/config.json', ten
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process Therefore documents for tenants.")
     parser.add_argument("--tenant", dest="tenant_name", help="Name of the tenant to process")
-    parser.add_argument("--config", dest="config_path", default="config/config.json", help="Path to config file")
-    parser.add_argument("--db-dir", dest="db_dir", default="db/docs", help="Directory for SQLite DBs")
+    parser.add_argument("--config", dest="config_path", default=DEFAULT_CONFIG_PATH, help="Path to config file")
+    parser.add_argument("--db-dir", dest="db_dir", default=DEFAULT_DB_DIR, help="Directory for SQLite DBs")
     args = parser.parse_args()
 
     get_therefore_documents_for_processing(

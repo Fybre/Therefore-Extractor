@@ -13,6 +13,11 @@ from nomic import embed
 import therefore_functions
 import utils
 
+DEFAULT_CONFIG_PATH = 'config/config.json'
+DEFAULT_DB_DIR = 'db/docs'
+DEFAULT_VECTORDB_DIR = 'db/vectordb'
+DEFAULT_TENANT_NAME = 'defaulttenant'
+
 # ----------------------------
 # CONFIG: Logging
 # ----------------------------
@@ -46,7 +51,7 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]
 # ----------------------------
 # Config Functions
 # ----------------------------
-def load_config(config_path='config.json'):
+def load_config(config_path=DEFAULT_CONFIG_PATH):
     if not os.path.exists(config_path):
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
     with open(config_path, 'r') as config_file:
@@ -131,8 +136,8 @@ def process_document(collection, tenant_config, auth_token, doc_no, version):
 # ----------------------------
 # Tenant Processing
 # ----------------------------
-def process_tenant(tenant_config, db_dir="db/docs", vectordb_dir="db/vectordb"):
-    tenant_name = tenant_config.get('Tenant', 'defaulttenant')
+def process_tenant(tenant_config, db_dir, vectordb_dir):
+    tenant_name = tenant_config.get('Tenant', DEFAULT_TENANT_NAME)
     logging.info(f"Processing tenant: {tenant_name}")
 
     auth_token = utils.basic_auth_token(
@@ -168,7 +173,7 @@ def process_tenant(tenant_config, db_dir="db/docs", vectordb_dir="db/vectordb"):
 # ----------------------------
 # Main Entry
 # ----------------------------
-def process(config_path='config/config.json', tenant_name=None, db_dir="db/docs", vectordb_dir="db/vectordb"):
+def process(config_path=DEFAULT_CONFIG_PATH, tenant_name=None, db_dir=DEFAULT_DB_DIR, vectordb_dir=DEFAULT_VECTORDB_DIR):
     config = load_config(config_path)
     tenant_configs = get_tenant_configs(config, tenant_name)
 
@@ -178,9 +183,9 @@ def process(config_path='config/config.json', tenant_name=None, db_dir="db/docs"
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process and embed Therefore documents.")
     parser.add_argument("--tenant", dest="tenant_name", help="Name of the tenant to process")
-    parser.add_argument("--config", dest="config_path", default="config/config.json", help="Path to config file")
-    parser.add_argument("--db-dir", dest="db_dir", default="db/docs", help="Directory containing tenant SQLite DBs")
-    parser.add_argument("--vectordb-dir", dest="vectordb_dir", default="db/vectordb", help="Directory for Chroma persistent DBs")
+    parser.add_argument("--config", dest="config_path", default=DEFAULT_CONFIG_PATH, help="Path to config file")
+    parser.add_argument("--db-dir", dest="db_dir", default=DEFAULT_DB_DIR, help="Directory containing tenant SQLite DBs")
+    parser.add_argument("--vectordb-dir", dest="vectordb_dir", default=DEFAULT_VECTORDB_DIR, help="Directory for Chroma persistent DBs")
     args = parser.parse_args()
 
     process(

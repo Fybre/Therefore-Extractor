@@ -1,0 +1,12 @@
+{
+  "Tenants": [
+    {
+      "BaseUrl": "https://tenantname.thereforeonline.com",
+      "Tenant": "tenantname",
+      "Username": "username",
+      "Password": "password",
+      "categories": []
+    }
+  ]
+}
+// Example config file for Therefore Extractor

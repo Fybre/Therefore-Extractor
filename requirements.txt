@@ -1,0 +1,4 @@
+nomic[local]
+pdfplumber
+chromadb
+numpy

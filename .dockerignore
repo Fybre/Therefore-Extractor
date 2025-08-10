@@ -1,0 +1,27 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.env/
+
+# Local databases and output data
+db/
+output/
+*.db
+
+# OS/system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Git ignoring
+.git
+.gitignore
+
+# Ignore config file (your request)
+config/config.json

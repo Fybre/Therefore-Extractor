@@ -1,0 +1,18 @@
+services:
+  therefore-pipeline:
+    image: fybre/thereforeembedder # Name of your built Docker image
+    container_name: thereforeembedder
+    restart: unless-stopped # Restart policy (good for long-running jobs)
+    environment:
+      # Optional: pass tenant and db dir as environment variables
+      # These will be picked up by run_pipeline.sh
+      - TENANT_ARG=mytenant # (optional) Only process this tenant
+      - DB_DIR_ARG=/db/docs # (optional) Path to tenant DBs inside container
+      - PAUSE_INTERVAL=3h # (optional) How long to wait between runs
+    volumes:
+      # Mount config directory from host to container
+      - ./config:/config
+      # Mount vector DB directory from host to container (persists embeddings)
+      - ./db/vectordb:/vectordb
+      # Mount docs DB directory if needed (optional, if you want to persist/inspect SQLite DBs)
+      - ./db/docs:/db/docs

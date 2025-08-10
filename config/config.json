@@ -1,0 +1,11 @@
+{
+  "Tenants": [
+    {
+      "BaseUrl": "https://craigdemo.thereforeonline.com",
+      "Tenant": "craigdemo",
+      "Username": "craig.mewett",
+      "Password": "The#1234",
+      "categories": []
+    }
+  ]
+}

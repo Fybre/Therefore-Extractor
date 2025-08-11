@@ -1,19 +1,21 @@
 FROM python:3.11-slim
 
+# Set workdir
 WORKDIR /app
 
+# Copy only requirements first (layer caching)
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
 COPY . /app
 
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# Create runtime directories for output, SQLite DBs, and Chroma DBs
+RUN mkdir -p /app/output /app/db/docs /app/db/vectordb /app/config
 
-# Make the script executable
-RUN chmod +x /app/run_pipeline.sh
+# Default command: run unified pipeline
+CMD ["python", "run_pipeline.py"]
 
-# Create required directories
-# These directories are used for output, SQLite DBs, and Chroma persistent DBs
-RUN mkdir -p /app/output /app/db/docs /app/db/vectordb
-
-
-# Default command: run the pipeline script
-CMD ["/app/run_pipeline.sh"]

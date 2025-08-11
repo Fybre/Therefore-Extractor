@@ -1,11 +1,15 @@
 services:
-  therefore-pipeline:
+  therefore-embedder:
     image: fybre/thereforeembedder
     container_name: thereforeembedder
     restart: unless-stopped
     environment:
-      - TENANT_ARG=mytenant # optional
-      - PAUSE_INTERVAL=3h # optional
+      #- TENANT_ARG=mytenant
+      #- CONFIG_PATH=config/config.json
+      #- DB_DIR_ARG=db/docs
+      #- VECTORDB_DIR_ARG=db/vectordb
+      - INTERVAL=3h # optional, omit for run once
     volumes:
-      - ./config:/app/config # ensure leading slash in container path!
-      - ./db:/app/db # persists both docs and vectordb directories
+      - ./config:/app/config
+      - ./db:/app/db
+      #- ./output:/app/output # optional, for output files
